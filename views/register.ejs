@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
+    <link href="/stylesheets/main.css" rel="stylesheet">
+    <title>VR_House_Gallery</title>
+</head>
+<body class="white-skin">
+    <div class="container my-5 py-5 z-depth-1">
+
+    
+        <!--Section: Content-->
+        <section class="px-md-5 mx-md-5 text-center text-lg-left dark-grey-text">
+
+
+        <!--Grid row-->
+        <div class="row d-flex justify-content-center">
+
+            <!--Grid column-->
+            <div class="col-md-6">
+
+            <!-- Default form register -->
+            <form class="text-center" action="/apiPost/register" method="post">
+                <p class="h4 mb-4">Sign up</p>
+
+                <div class="form-row mb-4">
+                <div class="col">
+                    <!-- First name -->
+                    <input type="text" id="firstname" name="firstname" class="form-control" placeholder="First name" required>
+                </div>
+                <div class="col">
+                    <!-- Last name -->
+                    <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Last name" required>
+                </div>
+                </div>
+
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+<br>
+                <!-- E-mail -->
+                <input type="email" id="email" name="email" class="form-control mb-4" placeholder="E-mail" required>
+
+                <!-- Phone number -->
+                <input type="number" id="phone_number" name="phone_number" class="form-control" placeholder="Phone number"
+                aria-describedby="defaultRegisterFormPhoneHelpBlock" required>
+                <small id="defaultRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
+                <!-- Optional - for two step authentication -->
+                </small>
+                
+
+                <div class="form-row mb-4">
+                <div class="col">
+                    <!-- County -->
+                    <input type="text" id="county" name="county" class="form-control" placeholder="County" required>
+                </div>
+                </div>
+
+                <!-- Password -->
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                aria-describedby="defaultRegisterFormPasswordHelpBlock" required>
+                <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                At least 8 characters and 1 digit
+                </small>
+
+                <!-- Password confirm -->
+                <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password"
+                aria-describedby="defaultRegisterFormPasswordHelpBlock" required>
+                <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                At least 8 characters and 1 digit
+                </small>
+                <% if(hasmessage){ %>
+                    <%= messages %>
+                    <% } %>
+                <!-- Sign up button -->
+                <button class="btn btn-amber my-4 btn-block" type="submit">Sign in</button>
+
+
+                <hr>
+
+                <!-- Terms of service -->
+                <p>By clicking
+                <em>Sign in</em> you agree to our
+                <a href="" target="_blank">terms of service</a>
+
+                <p>Already a member?
+                <a href="/apiGet/login">Login</a>
+                </p>
+
+            </form>
+            <!-- Default form register -->
+
+            </div>
+            <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+        </section>
+        <!--Section: Content-->
+
+  </div>
+
+</body>
+<footer>
+    
+</footer>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/js/mdb.min.js"></script>
+<!-- <script src="/javascripts/jquerymobile.js"></script> -->
+<script src="/javascripts/main.js"></script>
+</html>
