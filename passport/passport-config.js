@@ -25,6 +25,7 @@ passport.use(new LocalStrategy({
           return;
       }
       if (!user) {
+        console.log("error mehn")
         return done(null, false,{ failureFlash: 'invalid' });
       }
 

@@ -8,6 +8,7 @@
  */
 require('dotenv/config'); //load the dotenv config file
 const userPost = require('../models/usersPost'); //load the User Database Schema
+const filePost = require('../models/filePost'); //load the User Database Schema
 const bcrypt = require('bcrypt');  //load encryption library for hashing
 const request = require('request');
 const rp = require('request-promise');
@@ -37,7 +38,27 @@ exports.registeruser = async (body) => { //handles registration of users
     }
   }
 
+  exports.fileupload = async(file,user) =>{
+    try {
+      const nfile = new filePost({
+        filepath:file + ".pdf",
+        username:user
+      });
+      await nfile.save();
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
+  exports.userprefile = async (username) => {
+    try {
+      
+      var result = await filePost.find({username:username});
+      return result;
+    } catch (error) {
+      console.log(error)
+    }
+  }
 // exports.indexitempopulate = async () => {
 //   try {
 //       // const result = await itemPost.find({}).limit(6);

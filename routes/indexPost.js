@@ -22,6 +22,27 @@ const mongoSanitize = require('express-mongo-sanitize'); //load library to sanit
 router.use(passport.initialize());
 router.use(passport.session());
 
+const multer  = require('multer');
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/assets/ownslides');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now()+".pdf")
+  }
+});
+
+const fileFilter = function (req, file, callback) {
+  // accept image only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|pdf)$/)) {
+      return callback(new Error('Only image files are allowed!'), false);
+  }
+  callback(null, true);
+};
+
+const upload = multer({ storage: storage,fileFilter: fileFilter });
 ///////////////////////////////////////// FUNCTION FOR CHECKING IF USER IS AUTHENTICATED \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
@@ -57,7 +78,7 @@ router.post('/login',cleanBody, whereYouwere,
                                    successFlash:true })
 );
 
-
+router.post('/fileupload',isLoggedIn,upload.single('presentationfile'),controller.postFileupload);
 // router.post('/emailReset',cleanBody,controller.postemailReset);
 
 // router.post('/reset',cleanBody,controller.postemailReset);

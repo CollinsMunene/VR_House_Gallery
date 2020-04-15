@@ -8,7 +8,7 @@
  */
 
 const services  = require('../services/services');
-
+var fs = require('fs');
 const create  = services;
 
 
@@ -39,20 +39,41 @@ exports.getSignup = async (req, res) => {
 
 exports.getIndex = async (req, res) => {
     try {
-        if(req.sessionID){
             hassess = true
-            res.render('index',{hassess:hassess, username:req.user.username});
-        }
+            var result = await create.userprefile(req.user.username);
+            if(result <= 0){
+                hasfiles = false
+            }else{
+                hasfiles = true
+            }
+           
+            res.render('index',{hassess:hassess, username:req.user.username, files:result,hasfiles:hasfiles});
+        
     } catch (error) {
         throw new Error(error.message);
     }
 }
 
+exports.getroom = async (req,res) => {
+    try {
+        var path = 'public/assets/ownslidespres'
+        
+        fs.readdir(path, function(err, items) {
+            // console.log(items);
+            if(items <= 0){
+                hasfiles = false
+            }else{
+                hasfiles = true
+            }
+            var myArr = Array.from(items);
+            res.render('vrroom',{ username:req.params.string,slides:myArr,hasfiles:hasfiles,itemnumber:items.length});
 
-
-
-
-
+        });
+        // res.render('vrroom',{ username:req.params.string});
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
 
 exports.postRegister = async (req, res, next) => {
     try {
@@ -68,7 +89,24 @@ exports.postRegister = async (req, res, next) => {
     }
 }
 
+exports.postFileupload = async (req,res,next) => {
+    try{
+        var don = await create.fileupload(req.file.filename,req.user.username);
+        res.redirect('/apiGet/')
+    }catch(e){
+        console.log(e)
+    }
+}
 
+exports.getloadpower = async (req,res,next) => {
+     var convertapi = require('convertapi')('8V49kuSOkGbeHlsO');
+     convertapi.convert('jpg', {
+         File: 'public/assets/ownslides/'+req.params.string
+     }, 'pdf').then(function(result) {
+         result.saveFiles('public/assets/ownslidespres');
+     });
+     res.redirect('/apiGet/')
+ }
 
 
 //   exports.deleteLogout = async (req, res, next) => {

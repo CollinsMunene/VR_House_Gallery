@@ -12,6 +12,10 @@
 //require('dotenv/config'); //load the dotenv config file
 const createError = require('http-errors'); //load http-errors library
 const express = require('express'); //load express library
+// var express = require('express');
+var app = express();
+var server = app.listen(3000);
+var io = require('socket.io').listen(server);
 const path = require('path'); //load path library
 const cookieParser = require('cookie-parser');  //load cookie parser library
 const csrf = require('csurf')
@@ -28,7 +32,7 @@ const helmet = require('helmet')  //load library that sets constious security he
 const mongoSanitize = require('express-mongo-sanitize'); //load library to sanitize user inputs
 const expressValidator = require('express-validator');
 var flash = require('connect-flash')
-
+var compression = require('compression')
 
 ///////////////////////////////////////// ROUTES CAN COME HERE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const GetRouter = require('./routes/indexGet');
@@ -36,8 +40,8 @@ const PostRouter = require('./routes/indexPost');
 const DeleteRouter = require('./routes/indexDelete');
 
 
-const app = express();
-
+// const app = express();
+app.use(compression())
 ///////////////////////////////////////// LOAD VIEW(ejs) SETTINGS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -82,6 +86,7 @@ app.use(session({
 }));
 app.use(flash())
 
+
 app.use(require('connect-flash')());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
@@ -120,6 +125,81 @@ app.use(cors());
 
 app.get('/', function(req, res) {
   res.redirect('/apiGet/');
+});
+
+io.on('connection', function (socket) {
+  //message from client that file load button has been clicked
+  socket.on('fileloadmessage',function(){
+    //broadcast to all client what to do after the button is clicked
+    console.log("button clicked")
+    socket.broadcast.emit('loadFile');
+    socket.emit('loadFile');
+  });
+  //end of the file load button click message
+
+    //message from client that slideshow load button has been clicked
+    socket.on('nowloadslideshow',function(){
+      //broadcast to all client what to do after the button is clicked
+      socket.broadcast.emit('loadslideshow');
+      socket.emit('loadslideshow');
+    });
+    //end of the slideshow load button click message
+
+})
+
+//networked room and avatar show code
+const rooms = {};
+
+io.on("connection", socket => {
+  console.log("user connected", socket.id);
+
+  let curRoom = null;
+
+  socket.on("joinRoom", data => {
+    const { room } = data;
+
+    if (!rooms[room]) {
+      rooms[room] = {
+        name: room,
+        occupants: {},
+      };
+    }
+
+    const joinedTime = Date.now();
+    rooms[room].occupants[socket.id] = joinedTime;
+    curRoom = room;
+
+    console.log(`${socket.id} joined room ${room}`);
+    socket.join(room);
+
+    socket.emit("connectSuccess", { joinedTime });
+    const occupants = rooms[room].occupants;
+    io.in(curRoom).emit("occupantsChanged", { occupants });
+  });
+
+  socket.on("send", data => {
+    io.to(data.to).emit("send", data);
+  });
+
+  socket.on("broadcast", data => {
+    socket.to(curRoom).broadcast.emit("broadcast", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log('disconnected: ', socket.id, curRoom);
+    if (rooms[curRoom]) {
+      console.log("user disconnected", socket.id);
+
+      delete rooms[curRoom].occupants[socket.id];
+      const occupants = rooms[curRoom].occupants;
+      socket.to(curRoom).broadcast.emit("occupantsChanged", { occupants });
+
+      if (occupants == {}) {
+        console.log("everybody left room");
+        delete rooms[curRoom];
+      }
+    }
+  });
 });
 
 ////////////////////////////////////////// CATCH 404 ERRORS AND PUSH TO THE ERROR HANDLER \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

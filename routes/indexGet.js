@@ -36,10 +36,18 @@ function isLoggedIn(req, res, next) {
 
 ////////////////////////////////////////// INDEX PAGE GET REQUEST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 router.get('/',isLoggedIn, controller.getIndex );
-
+router.get('/room/:string',controller.getroom);
 router.get('/login',controller.getLogin);
 router.get('/signup',controller.getSignup);
-
+router.get('/loadpower/:string',controller.getloadpower);
+// router.get('/loadpower/:string', function(res,req){
+//   var convertapi = require('convertapi')('8V49kuSOkGbeHlsO');
+//   convertapi.convert('jpg', {
+//       File: 'public/assets/ownslides/presentationfile-1586787358466.pdf'
+//   }, 'pdf').then(function(result) {
+//       result.saveFiles('public/assets/ownslidespres');
+//   });
+// })
 // router.get('/reset', controller.userreset);
 
 // router.get('/resetpass', controller.getuserresetpass);
