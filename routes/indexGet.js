@@ -30,16 +30,18 @@ function isLoggedIn(req, res, next) {
      return next();
   }
   req.session.returnTo = req.originalUrl;
-  console.log(req.session.returnTo);
   res.redirect('/apiGet/login');
 }
 
 ////////////////////////////////////////// INDEX PAGE GET REQUEST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-router.get('/',isLoggedIn, controller.getIndex );
-router.get('/room/:string',controller.getroom);
+router.get('/', controller.getIndex );
 router.get('/login',controller.getLogin);
 router.get('/signup',controller.getSignup);
-router.get('/loadpower/:string',controller.getloadpower);
+router.get('/createroom',isLoggedIn,controller.getcreateroom);
+router.get('/userprofile',isLoggedIn, controller.getuserprofile );
+router.get('/joinroom',isLoggedIn,controller.getjoinroom);
+router.get('/:id',isLoggedIn,controller.getjoinVRroom)
+router.get('/loadpower/:string',isLoggedIn,controller.getloadpower);
 // router.get('/loadpower/:string', function(res,req){
 //   var convertapi = require('convertapi')('8V49kuSOkGbeHlsO');
 //   convertapi.convert('jpg', {

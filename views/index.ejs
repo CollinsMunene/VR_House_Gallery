@@ -1,41 +1,310 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>Collaborative VR</title>
+    <link rel='icon' href='/images/favicon.jpg' type='image/x-icon'/>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
+        <link href="/stylesheets/main.css" rel="stylesheet">
+    <style>
 
-    <title>Document</title>
+        html,
+        body,
+        header,
+        .view {
+          height: 100%;
+        }
+      
+        @media (max-width: 740px) {
+          html,
+          body,
+          header,
+          .view {
+            height: 1000px;
+            position: initial;
+          }
+        }
+        @media (min-width: 800px) and (max-width: 850px) {
+          html,
+          body,
+          header,
+          .view {
+            height: 600px;
+          }
+        }
+      
+        .btn .fa {
+          margin-left: 3px;
+        }
+      
+        .top-nav-collapse {
+          background-color: #424f95 !important;
+        }
+      
+        .navbar:not(.top-nav-collapse) {
+          background: transparent !important;
+        }
+      
+        @media (max-width: 991px) {
+         .navbar:not(.top-nav-collapse) {
+          background: #424f95 !important;
+         }
+        }
+      
+        .btn-white {
+          color: black !important;
+        }
+      
+        h6 {
+          line-height: 1.7;
+        }
+      
+        .rgba-gradient {
+          background: -moz-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
+          background: -webkit-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
+          background: -webkit-gradient(linear, 45deg, from(rgba(42, 27, 161, 0.7)), to(rgba(29, 210, 177, 0.7)));
+          background: -o-linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
+          background: linear-gradient(to 45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
+        }
+      
+      </style>
 </head>
 <body>
-    <p>your username is <%= username %></p>
-    <p>Please choose a room</p>
-    <a href="/apiGet/room/<%= username %>">room1</a>
-    <br>
-    <form method="POST" action="/apiPost/fileupload" enctype="multipart/form-data">
-        <input type="file" name="presentationfile" id="presentationfile">
-        <button type="submit">Submit</button>
-    </form>
-    <br>
-    <div class="card">
-        <h3>Choose a your presentation document</h3>
-        <div class="row">
-            <% if(hasfiles){ %>
-            <% files.forEach(function(files){ %>
-            <div class="col-md-12">
-                <p id="<%= files.filepath %>">File name: <%= files.filepath %></p>
-              <a href="/apiGet/loadpower/<%= files.filepath %>">  <button id="loadtovr"  onclick="myFunction()">Load file</button></a>
-
+   
+  <!-- Main navigation -->
+  <header>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="/images/Logo.png" height="30" alt="mdb logo">
+          </a>
+        <!-- <a class="navbar-brand" href="#">
+          <strong>COllABORATION Vr</strong>
+        </a> -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
+          aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
+          <!-- <span class="navbar-toggler-icon"></span> -->
+          <a class="nav-link" href="/apiGet/userprofile" style="color: white;">Profile</a>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                  <!-- <a class="nav-link" href="/apiGet/">About Us -->
+                    <!-- <span class="sr-only">(current)</span> -->
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <!-- <a class="nav-link" href="about.html">About</a> -->
+                </li>
+                <!-- <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Categories</a>
+                  <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink" style="border-color: #d5c08b;">
+                    <a class="dropdown-item" href="/apiGet/wines">Wines</a>
+                    <a class="dropdown-item" href="/apiGet/spirits">Spirits</a>
+                    <a class="dropdown-item" href="/apiGet/beers">Beers</a>
+                  </div>
+                </li> -->
+            </ul>
+            <% if(loggedin){ %>
+              <!-- Right -->
+              <ul class="navbar-nav nav-flex-icons">
+                <!-- <form class="form-inline">
+                  <div class="md-form my-0">
+                    <input class="form-control mr-sm-2" id="anythingSearch" type="text" placeholder="Search" aria-label="Search">
+                  </div>
+                </form> -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light" href="/apiGet/favourites">
+                    <i class="far fa-star"></i>
+                    </a>
+                </li> -->
+                <li class="nav-item">
+                    <!-- <a class="nav-link waves-effect waves-light" href="/apiGet/cart"> -->
+                      <a class="nav-link" href="/apiGet/userprofile">Profile</a>
+                    <!-- </a> -->
+                </li>
+                <!-- <li class="nav-item dropdown avatar">
+                  <a class=" nav-link dropdown-toggle p-0" id="navbarDropdownMenuLink" 
+                  data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                      <img src="/images/profile_images/<%= userimage %>" class="rounded-circle z-depth-0"
+                        alt="avatar image" height="35">
+                  </a>
+                  <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink" style="border-color: #d5c08b;">
+                    <a class="dropdown-item" href="/apiGet/profile">Profile</a>
+                    <form action="/apiDelete/logout?_method=DELETE" method="post" class="dropdown-item">
+                      <button type="submit" class="btn">Log Out</button>
+                    </form>
+                  </div>
+                </li> -->
+              </ul>
+            <% } else{ %>  
+              <ul class="navbar-nav nav-flex-icons">
+                <!-- <form class="form-inline">
+                  <div class="md-form my-0">
+                    <input class="form-control mr-sm-2"  id="anythingSearch"  type="text" placeholder="Search" aria-label="Search">
+                  </div>
+                </form> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="/apiGet/login">login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/apiGet/signup">Sign up</a>
+                </li>
+              </ul>
+          <% } %>
+          </div>
+      </div>
+    </nav>
+    <!-- Full Page Intro -->
+    <div class="view" style="background-image: url('/images/clogo.jpeg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+      <!-- Mask & flexbox options rgba-gradient-->
+      <div class="mask  d-flex justify-content-center align-items-center">
+        <!-- Content -->
+        <div class="container">
+          <!--Grid row-->
+          <div class="row">
+            <!--Grid column-->
+            <div class="col-md-6 col-xl-5 mt-xl-5 wow fadeInRight" data-wow-delay="0.3s">
+                <!-- <img src="/images/clo.jpg" alt="" class="img-fluid"> -->
             </div>
-            <% }) %>
-            <% } %>
+            <!--Grid column-->
+            <!--Grid column-->
+            <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5 wow fadeInLeft" data-wow-delay="0.3s">
+              <h1 class="h1-responsive font-weight-bold mt-sm-5">COLLABORATION VR</h1>
+              <hr class="hr-light">
+              <!-- <h6 class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi
+                fuga nesciunt
+                dolorum nulla magnam veniam sapiente! Commodi sequi non animi ea dolor molestiae
+                iste.</h6> -->
+              <a  href="/apiGet/signup" class="btn btn-white btn-rounded">CREATE ACCOUNT</a>
+              <a class="btn btn-outline-white btn-rounded">Learn more</a>
+            </div>
+            <!--Grid column-->
+
+          </div>
+          <!--Grid row-->
         </div>
+        <!-- Content -->
+      </div>
+      <!-- Mask & flexbox options-->
     </div>
-    <script>
-        function myFunction() {
-            
-        }
-    </script>
+    <!-- Full Page Intro -->
+  </header>
+  <!-- Main navigation -->  
+  <div class="container mt-5 px-5 pt-5 pb-3 z-depth-1">
+
+  
+    <!--Section: Content-->
+    <section class="text-center dark-grey-text">
+      
+      <h6 class="font-weight-normal text-uppercase font-small grey-text mb-4">Features</h6>
+      <!-- Section heading -->
+      <h2 class="font-weight-bold">Experience Interactive Collaboration</h2>
+      <hr class="w-header my-4">
+      <!-- Section description -->
+      <!-- <p class="text-muted mx-auto mb-5">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit id laborum.</p> -->
+  
+      <div class="row text-center d-flex justify-content-center">
+        <div class="col-lg-4 col-md-12 mb-4">
+          <div class=" card-img-100 mx-auto mb-4" style="width: 100%;height: 190px;">
+            <img src="/images/avatars.gif" class="img-fluid" alt="smaple image">
+          </div>
+          <h5 class="font-weight-normal mb-4">Create Your Own Avatar</h5>
+          <p class="text-muted px-2 mb-lg-0">
+            We have given you the ability to choose your own avatar that other people you interact with
+            in the virtual space will identify you with.
+          </p>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class=" card-img-100 mx-auto mb-4" style="width: 100%;height: 230px;">
+            <img src="/images/presentations.png" class="img-fluid" alt="smaple image">
+          </div>
+          <h5 class="font-weight-normal mb-4">Make Presentations with your Own Documents</h5>
+          <p class="text-muted px-2 mb-lg-0">
+            In your virtual meetings you can now make presentations with your meeting attendees
+          </p>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class=" card-img-100 mx-auto mb-4" style="width: 100%;height: 190px;">
+            <img src="/images/fistbump.gif" class="img-fluid" alt="smaple image">
+          </div>
+          <h5 class="font-weight-normal mb-4"><b>Have a good time</b> &#x1F61C</h5>
+          <p class="text-muted px-2 mb-md-0">
+            Experience is Key
+          </p>
+        </div>
+      </div>
+      
+    </section>
+    <!--Section: Content-->
+  
+  </div><br><br>
 </body>
+<!-- Footer -->
+<footer class="page-footer font-small unique-color-dark
+darken-3">
+ 
+    <!-- Footer Elements -->
+    <div class="container">
+  
+      <!-- Grid row-->
+      <div class="row">
+  
+        <!-- Grid column -->
+        <div class="col-md-12 py-5">
+          <div class="mb-5 flex-center">
+  
+            <!-- Facebook -->
+            <a class="fb-ic">
+              <i class="fab fa-facebook-f fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!-- Twitter -->
+            <a class="tw-ic">
+              <i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!-- Google +-->
+            <a class="gplus-ic">
+              <i class="fab fa-google-plus-g fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!--Linkedin -->
+            <a class="li-ic">
+              <i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!--Instagram-->
+            <a class="ins-ic">
+              <i class="fab fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!--Pinterest-->
+            <a class="pin-ic">
+              <i class="fab fa-pinterest fa-lg white-text fa-2x"> </i>
+            </a>
+          </div>
+        </div>
+        <!-- Grid column -->
+  
+      </div>
+      <!-- Grid row-->
+  
+    </div>
+    <!-- Footer Elements -->
+  
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+      <a href=""> Devligence Limited</a>
+    </div>
+    <!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
 </html>

@@ -1,6 +1,13 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <link rel='icon' href='/images/favicon.jpg' type='image/x-icon'/>
+    <!-- a-frame main script initializer -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- socket.js  -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
     <!-- render-order script -->
     <script src="https://unpkg.com/aframe-render-order-component@1.0.0/dist/aframe-render-order-component.min.js"></script> 
@@ -22,194 +29,202 @@
     <script src="https://unpkg.com/aframe-slideshow-component/dist/aframe-slideshow-component.min.js"></script>
     <!-- <script defer src="/javascripts/main.js"></script>  -->
     <!-- <script src="https://unpkg.com/naf-easyrtc-adapter/dist/naf-easyrtc-adapter.min.js"></script>  -->
+    
+    <!-- template script -->
     <script src="https://unpkg.com/aframe-template-component@3.2.1/dist/aframe-template-component.min.js"></script>
+    <!-- proxy-event script -->
     <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
-  
-</head>
-  <body> 
-
-    <script>
-          AFRAME.registerComponent('invisibleslide', {
-          
-            init: function () {
-              // listen on button click and call actionchanged function
-                   var data = this.data;
-                  var el = this.el;  // <a-box>
-                  el.setAttribute('visible',false)
-                          
-            },
-          });
-    </script>
+    <!-- text geometry -->
+    <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script> 
+    <!-- room component -->
+    <script src="https://unpkg.com/aframe-room-component/dist/aframe-room-component.min.js"></script>
+  </head>
+  <body>
     <script>
       const socket = io('http://localhost:3000')
-          AFRAME.registerComponent('visibleslide-onclick', {
-          
-            init: function () {
-              // listen on button click and call actionchanged function
-              this.el.addEventListener('click', this.onButtonChange.bind(this));
-              console.log("ayee")
-              
-            },
-            onButtonChange: function () {
-              socket.emit('nowloadslideshow');
-              }
-          });
-          // on button clicked is noticed in the server then load the file
-          socket.on('loadslideshow', function() {
-            console.log("button slide clicked")
-            var slides = document.querySelector('#slideh');
-            slides.setAttribute('visible',true);
-            slides.setAttribute('aframe-slideshow',"nbslides:5;folder:/assets/slides/;vidSlidesIndex:3;animSlidesIndex:5;nbColumns:1;distBetweenSlides:1;slideYPos:0;");
-          });
-    </script>
-
-    <!-- open file onclick script -->
-    <script>
-      // const socket = io('http://localhost:3000')
+      // open random file open script
           AFRAME.registerComponent('open-file-onclick', {
-            // schema: {
-            //   color: {default: 'red'}
-            // },
-          
-            init: function () {
-              // listen on button click and call actionchanged function
-              this.el.addEventListener('click', this.onActionChange.bind(this));
+                // schema: {
+                //   color: {default: 'red'}
+                // },
               
-            },
-            onActionChange: function () {
-              // onactionchange emit to server that it has been clicked
-                socket.emit('fileloadmessage');
-            }
+                init: function () {
+                  // listen on button click and call actionchanged function
+                  this.el.addEventListener('click', this.onActionChange.bind(this));
+                  
+                  
+                },
+                onActionChange: function () {
+                  // onactionchange emit to server that it has been clicked
+                    socket.emit('fileloadmessage');
+                    // this.el.setAttribute('visible',false)
+                    // var slidebtn = document.querySelector('#loadslide');
+                    // slidebtn.setAttribute('visible',true)
+                    // var slidebox = document.querySelector('#slideshow');
+                    // slidebox.setAttribute('visible',false)
+                }
+              });
+
+              // on button clicked is noticed in the server then load the file
+              socket.on('loadFile', function() {
+                   var fileopenbtn = document.querySelector('#fileopen');
+                   fileopenbtn.setAttribute('visible',false)
+                    var slidebtn = document.querySelector('#loadslide');
+                    slidebtn.setAttribute('visible',true)
+                    var slidebox = document.querySelector('#slideshow');
+                    slidebox.setAttribute('visible',false)
+                  var loader = new THREE.FileLoader();
+
+                    //load a text file and output the result to the console
+                    loader.load(
+                      // resource URL
+                      '/images/cd_catalog.xml',
+
+                      // onLoad callback
+                      function ( data ) {
+                        // output the text to the console
+                        var headtext = document.querySelector('#header');
+                        headtext.setAttribute('visible',false)
+                        var plane = document.querySelector('a-text');
+                        plane.setAttribute('visible',true)
+                        plane.setAttribute('value', data);
+                        // console.log( data )
+                      },
+
+                      // onProgress callback
+                      function ( xhr ) {
+                        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                      },
+
+                      // onError callback
+                      function ( err ) {
+                        console.error( 'An error happened' );
+                      }
+                    );
           });
+      // end of random file open script
 
-          // on button clicked is noticed in the server then load the file
-          socket.on('loadFile', function() {
+      //open loaded slides for presentation script
+          AFRAME.registerComponent('foo', {
 
-              var loader = new THREE.FileLoader();
+                init: function () {
+                  var data = this.data;
+                  var el = this.el;
+                  el.addEventListener('click', this.onButtonSlide.bind(this));
+                },
+                onButtonSlide: function(){
+                  socket.emit('nowloadslides');
 
-                //load a text file and output the result to the console
-                loader.load(
-                  // resource URL
-                  '/images/cd_catalog.xml',
 
-                  // onLoad callback
-                  function ( data ) {
-                    // output the text to the console
-                    var plane = document.querySelector('a-text');
-                    plane.setAttribute('value', data);
-                    // console.log( data )
-                  },
+                }      
+            });
+            socket.on('loadslidesnow', function() {
+                var slidebtn = document.querySelector('#loadslide');
+                slidebtn.setAttribute('visible',false)
+                var headtext = document.querySelector('#header');
+                  headtext.setAttribute('visible',false)
+                  var fileopenbtn = document.querySelector('#fileopen');
+                  fileopenbtn.setAttribute('visible',true)
+                  var fileopenbox = document.querySelector('a-text');
+                  fileopenbox.setAttribute('visible',false)
+                  
 
-                  // onProgress callback
-                  function ( xhr ) {
-                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-                  },
+                var slides = ('<%= slides %>').split(" ")
+                var superslides = slides[0].split(",")
+                var co = '<%= itemnumber %>';
+                var box = document.querySelector('#prebox');
 
-                  // onError callback
-                  function ( err ) {
-                    console.error( 'An error happened' );
+                // console.log([slides].length)
+                for(let i =0;i<co;i++){
+
+                  var linksd = "/assets/ownslidespres/"+superslides[i]
+                  // var sceneEl = document.querySelector('a-scene');
+                  
+                  // var slideentity = document.querySelector('#slideshow');
+                  if(box){
+                    var slideentity = document.querySelector('#slideshow');
+                    slideentity.setAttribute('visible',true)
+                  }else{
+                    var slideentity = document.querySelector('#slideshow');
+                    var entityEl = document.createElement('a-plane');
+                    entityEl.setAttribute('id',"prebox")
+                    entityEl.setAttribute('src',linksd)
+                    slideentity.setAttribute('visible',true)
+                    slideentity.setAttribute('position',{x: -2.8, y: 3.5, z: 0.9})
+                    slideentity.appendChild(entityEl);
                   }
-                );
+                
+                }
+            });
+      //end of loading slides for presentation script
+
+      //loading different sky backgrounds script
+
+          AFRAME.registerComponent('button-interaction-handler', {
+                init: function () {
+                  this.el.addEventListener('click', this.onButtonSky.bind(this));
+                  
+                },
+                onButtonSky: function(){
+                  socket.emit('nowloadsky');
+                } 
           });
+          socket.on('loadskynow', function() {
+              var skyEl = document.querySelector('a-sky');
+
+              var headtext = document.querySelector('#header');
+              headtext.setAttribute('visible',true)
+
+              var fileopenbtn = document.querySelector('#fileopen');
+              fileopenbtn.setAttribute('visible',true)
+
+              var fileopenbox = document.querySelector('a-text');
+              fileopenbox.setAttribute('visible',false)
+
+              var slidebtn = document.querySelector('#loadslide');
+              slidebtn.setAttribute('visible',true)
+
+              var slidebox = document.querySelector('#slideshow');
+              slidebox.setAttribute('visible',false)
+
+            
+              skyEl.setAttribute('src', '#chineseTemple');  
+              
+
+              // this.el.addEventListener('mouseleave', function () {
+              //   skyEl.setAttribute('src', '#skyTexture');  
+              // });
+          });
+
+      //end of loading sky backgrounds script
+
+
     </script>
-    <!-- end of file open script -->
-
- 
-    <!-- random position script to align the avatars -->
-    <script>
-        AFRAME.registerComponent('spawn-in-circle', {
-            schema: {
-            radius: {type: 'number', default: 1}
-            },
-        
-            init: function() {
-            var el = this.el;
-            var center = el.getAttribute('position');
-        
-            var angleRad = this.getRandomAngleInRadians();
-            var circlePoint = this.randomPointOnCircle(this.data.radius, angleRad);
-            var worldPoint = {x: circlePoint.x + center.x, y: center.y, z: circlePoint.y + center.z};
-            el.setAttribute('position', worldPoint);
-        
-            var angleDeg = angleRad * 180 / Math.PI;
-            var angleToCenter = -1 * angleDeg + 90;
-            var rotationStr = '0 ' + angleToCenter + ' 0';
-            el.setAttribute('rotation', rotationStr);
-            },
-        
-            getRandomAngleInRadians: function() {
-            return Math.random()*Math.PI*2;
-            },
-        
-            randomPointOnCircle: function (radius, angleRad) {
-            x = Math.cos(angleRad)*radius;
-            y = Math.sin(angleRad)*radius;
-            return {x: x, y: y};
-            }
-        });
-    </script>
-    <!-- end of random position script -->
-
-    <script>
-      AFRAME.registerComponent('foo', {
-
-      init: function () {
-        var data = this.data;
-        var el = this.el;
-        el.addEventListener('click', this.onButtonChange.bind(this));
-        var slides = ('<%= slides %>').split(" ")
-        var superslides = slides[0].split(",")
-        var co = '<%= itemnumber %>'
-
-        // console.log([slides].length)
-        for(let i =0;i<co;i++){
-
-         
-            // var slides = document.querySelector('#city-thumb');
-            // superslides[i]
-
-            var linksd = "/assets/ownslidespres/"+superslides[i]
-            var sceneEl = document.querySelector('a-scene');
-            var entityEl = document.createElement('a-box');
-            entityEl.setAttribute('src',linksd)
-            sceneEl.appendChild(entityEl);
-            // if(i < '<%= itemnumber %>'){
-            //   slides.setAttribute('src',linksd);
-            //   console.log(slides)
-            //   console.log('<p>hi i am'+superslides[i]+'see me?')
-            //   if(i === '<%= itemnumber %>'){break}
-            // }
-        }
-      },
-      onButtonChange: function(){
-
-      }
-    });
-    </script>
-      <!-- initializing scene and network component -->
     <a-scene networked-scene="app:myApp;
     room:room1;
     adapter: webrtc;
-    audio: true;
-    debug:true;" >
-        <a-assets>
-          <img id="skyTexture" crossorigin="anonymous" src="/images/sky.jpg">
+    audio: false;
+    debug:true;">
 
-          <!-- <img id="city-thumb" crossorigin="anonymous">
+      <!-- asssets -->
+      <a-assets>
+        <img id="skyTexture" crossorigin="anonymous" src="/images/sky.jpg">
+        <img id="backgroundInsideHouse" crossorigin="anonymous" src="https://cdn.glitch.com/e6225ccd-c32e-4cf8-b039-e78814a8cb78%2Fbg-3.jpg">
+        <img id="chineseTemple" crossorigin="anonymous" src="/images/office1.jpg">
 
-        <!-- Image link template to be reused.--
-        <script id="link" type="text/html">
-          <a-entity class="link"
-            geometry="primitive: box; height: 1; width: 1"
-            material="shader: flat; src: ${thumb}"
-            ></a-entity>
-        </script>  -->
-            <!-- Player avatar -->
-            <template id="player-template">
-                <a-entity networked-audio-source></a-entity>
-            </template>
-    
-            <!-- Head of avatar -->
+        <a-asset-item id="user-gltf" src="/saurav_face_3d_scan_-_low_poly/scene.gltf"></a-asset-item>
+
+
+        <a-asset-item id="table-gltf" src="/desk_table_with_wheels/scene.gltf"></a-asset-item>
+        <a-asset-item id="chair-gltf" src="/6_chair_skf/scene.gltf"></a-asset-item>
+        <a-asset-item id="optimerBoldFont" src="https://rawgit.com/mrdoob/three.js/dev/examples/fonts/optimer_bold.typeface.json"></a-asset-item>
+
+        <!-- Player avatar -->
+        <template id="player-template">
+          <a-entity networked-audio-source></a-entity>
+        </template>
+
+                    <!-- Head of avatar -->
             <template id="head-template">
                 <a-entity class="avatar">
                   <!-- name of player avatar -->
@@ -262,34 +277,23 @@
                 </a-entity>
             </template>
             <!-- end of head -->
+      </a-assets>
+      <!-- end of assets -->
 
-            <!-- hand template -->
-            <template id="left-hand-template">
-                <a-entity>
-                    <a-box  color="red" position="1 -1 0"
-                    scale="0.3 0.3 0.3"></a-box>
-                </a-entity>
-            </template>
-
-            <template id="right-hand-template">
-                <a-entity>
-                    <a-box  color="red" position="-1 -1 0"
-                    scale="0.3 0.3 0.3"></a-box>
-                </a-entity>
-            </template>
-            <!-- end of hand template -->
-
-        </a-assets>
-
-        <!-- 360-degree image. -->
-        <a-sky id="image-360" radius="10" src="#skyTexture"
-        animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
-        animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"></a-sky>
+      <!-- 360-degree image. -->
+      <a-sky id="image-360" radius="10" src="#skyTexture"
+      animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+      animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"></a-sky>
+      
 
 
-        <!-- avatar start -->
-        <a-entity  id="camParent acamera" camera wasd-controls look-controls movement-controls="fly: true" networked="template:#player-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3" position="0 2.6 0">
-            <a-entity id="came"    networked="template:#head-template;attachTemplateToLocal:false;">
+      <a-entity id="cameraRig">
+        <!-- camera -->
+
+                 <!-- avatar start -->
+        <a-entity  id="camParent acamera" camera wasd-controls look-controls movement-controls="fly: true" networked="template:#player-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3" position="0 3.6 1.4" >
+            
+          <a-entity networked="template:#head-template;attachTemplateToLocal:false;">
                 <a-sphere class="head"
                   random-color
                   visible="false"></a-sphere>
@@ -300,83 +304,99 @@
                 fuse="false">
                 <!-- end of user cursor to screen -->
             </a-entity>
-            
-            <!-- hand controls -->
-            <a-entity oculus-go-controls teleport-controls="cameraRig: #camParent; teleportOrigin: #camParent;" hand-controls="right" networked="template:#left-hand-template;">
-                                     <!-- user cursor to screen -->
-                                     <a-gui-cursor id="cursor"
-                                     raycaster="objects: [gui-interactable]"
-                                     fuse="false">
-                                     <!-- end of user cursor to screen -->
-            </a-entity>
-            <a-entity oculus-go-controls  teleport-controls="cameraRig: #camParent; teleportOrigin: #camParent;" hand-controls="right" networked="template:#right-hand-template;"  >
-                                     <!-- user cursor to screen -->
-                                     <a-gui-cursor id="cursor"
-                                     raycaster="objects: [gui-interactable]"
-                                     fuse="false">
-                                     <!-- end of user cursor to screen -->
-            </a-entity>
-            <!-- end of hand controls -->
-
+      
         </a-entity>
-        <!-- end of avatar -->
+                 <!-- end of avatar -->
+
+                  <!-- hand controls -->
+        <a-entity id="left-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #camParent;" oculus-go-controls="hand: left" laser-controls="hand: left"></a-entity>
+        <a-entity id="right-hand" teleport-controls="cameraRig: #cameraRig; teleportOrigin: #camParent;" oculus-go-controls="hand: right" laser-controls="hand: right"></a-entity>
+     
+      </a-entity>
+
+      <a-entity id="header" text-geometry="value: WELCOME TO DEVLIGENCE VR; font: #optimerBoldFont" position="-2.8 3.5 1.8" rotation="0 90 0" scale="0.3 1.5 1"></a-entity>
 
         <!-- start of common screen -->
-        <a-text anchor="center" align="center" width="0.8" value="WELCOME TO DEVLIGENCE" geometry="primitive:plane;" position="2 4.5 -5" scale="5 5 1"></a-text>
+        <!-- <a-entity id="common_screen"
+  geometry="primitive: plane; width: 4; height: auto"
+  material="color: blue"
+  text="value: This text will be 4 units wide." visible="false" position="-4 4.5 -5"></a-entity> -->
+        <a-text anchor="center" align="center" width="0.8" value="" geometry="primitive:plane; width: auto; height: auto" visible="false" position="-2.8 3.53 0" rotation="0 90 0" scale="4 4 1"></a-text>
         <!-- end of common screen -->
 
-  <!-- start of gui file open button  -->
-      <a-gui-button 
-      width="2.5" height="0.75"
-      onclick="" key-code="32"
-      value="Open random file"
-      font-family="Arial"
-      margin="0 0 0.05 0" open-file-onclick='' position="0 3.5 -5"
-       >
-    </a-gui-button>
- <!-- end of gui file open button -->
+          <!-- start of gui file open button  -->
+                <a-gui-button  id="fileopen"
+                        width="2.5" height="0.75"
+                        onclick="" key-code="32"
+                        value="Open random file"
+                        font-family="Arial"
+                        margin="0 0 0.05 0" open-file-onclick='' position="-1.5 3.8 -1.9" scale="0.4 0.7 0.5"
+                        >
+              </a-gui-button>
+          <!-- end of gui file open button -->
 
-  <!-- start of gui start slideshow button -->
-  <a-gui-button 
-        width="2.5" height="0.75"
-        onclick="" key-code="32"
-        value="Start Slideshow"
-        font-family="Arial"
-        margin="0 0 0.05 0" visibleslide-onclick='' position="5 3.5 -5"
-        >
-  </a-gui-button>
-  <!-- end of gui slideshow button -->
 
-  <!-- slideshow components -->
-     <!-- <div id="loaderDiv" class="dialog-container make-container--visible" visible="false">
-        <img class="loader" src="public/assets/icons/loader.gif" />
-      </div>
-      <a-plane position="-3 4.5 -5">
-        <a-entity color="transparent" id="slideh" invisibleslide=''></a-entity>
-      </a-plane> -->
-  <!-- end of slideshow components -->
+          <!-- start of gui start slideshow button -->
+                <a-gui-button 
+                        width="2.5" height="0.75"
+                        onclick="" key-code="32"
+                        value="Change View"
+                        font-family="Arial"
+                        margin="0 0 0.05 0"  button-interaction-handler='' position="-0.2 3.8 -1.9" scale="0.4 0.7 0.5"
+                        >
+                        <!-- button-interaction-handler='' -->
+                </a-gui-button>
+          <!-- end of gui slideshow button -->
 
-  <!-- <a-entity foo ><a-box></a-box></a-entity> -->
-  <a-gui-button 
-		width="2.5" height="0.75"
-		onclick="" key-code="32"
-		value="test button"
-		font-family="Arial"
-		margin="0 0 0.05 0"
-    foo position="2.5 3.5 -5">
-  </a-gui-button>
-  
-  
-    <% if(hasfiles){ %>
 
-          
-    <% } %>
-    
-     <!-- Image links. -->
-     <!-- <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4">
-       <a-entity template="src: #link" data-src="#city" data-thumb="#city-thumb"></a-entity>
-    </a-entity> -->
-  </a-scene>
-    <!-- end of scene -->
+          <!-- start of gui start loaded slideshow -->
+                  <a-gui-button  id="loadslide"
+                          width="2.5" height="0.75"
+                          onclick="" key-code="32"
+                          value="Open presentation"
+                          font-family="Arial"
+                          margin="0 0 0.05 0"
+                          foo=''  position="1 3.8 -1.9" scale="0.4 0.7 0.5">
+                  </a-gui-button>
+          <!-- end of gui loaded sliedshow -->
+
+
+          <a-entity id="slideshow" layout="type:line; reverse:true" rotation="0 90 0" position="-2.8 3.5 0.9" scale="1.8 1.8 1">
+            
+          </a-entity>
+
+          <rw-room position="-3 2.4 -2" scale="1.4 1 1" material="color:#866">
+              <rw-wall position="4 0 0"></rw-wall>
+              <rw-wall position="4 0 4"></rw-wall>
+              <rw-wall position="0 0 4"></rw-wall>
+              <rw-wall position="0 0 0">
+                  <rw-doorhole id="holeA"></rw-doorhole>
+                  <rw-doorlink from="#holeA" to="#holeB" position="2.5 0 0"></rw-doorlink>
+              </rw-wall>
+              <rw-floor material="color:#BBB"></rw-floor>
+          </rw-room>
+          <rw-room position="-3 2.4 -2">
+              <rw-wall position=" 1 0 -1" material="color:#787"></rw-wall>
+              <rw-wall position=" 1 0  1" material="color:#877">
+                <rw-doorhole id="holeB"></rw-doorhole>
+              </rw-wall>
+              <rw-wall position="-1 0  1" material="color:#878"></rw-wall>
+              <rw-wall position="-1 0 -1" material="color:#778"></rw-wall>
+              
+          </rw-room>
+
+                <!-- Table -->
+              <!-- <a-cylinder class="table"
+                    position="0 3 -0.2"
+                    height="0.02" color="#00FFFFFF"
+                    segments-height="1" segments-radial="6">
+              </a-cylinder> -->
+              
+              <a-entity id="user" gltf-model="#user-gltf" ></a-entity>
+
+              <a-entity id="chair2" gltf-model="#chair-gltf" position="-0.3 3 -1" scale="1 1 0.7" ></a-entity>
+              <a-entity id="table" gltf-model="#table-gltf" position="0 3 0.1" scale="1 1 0.7" rotation="0 90 0"></a-entity>
+              <a-entity id="chair1" gltf-model="#chair-gltf" position="-0.3 3 1" scale="1 1 0.7" rotation="0 180 0"></a-entity>
+    </a-scene>
   </body>
 </html>

@@ -9,6 +9,7 @@
 require('dotenv/config'); //load the dotenv config file
 const userPost = require('../models/usersPost'); //load the User Database Schema
 const filePost = require('../models/filePost'); //load the User Database Schema
+const roomPost = require('../models/roomPost');
 const bcrypt = require('bcrypt');  //load encryption library for hashing
 const request = require('request');
 const rp = require('request-promise');
@@ -58,6 +59,17 @@ exports.registeruser = async (body) => { //handles registration of users
     } catch (error) {
       console.log(error)
     }
+  }
+  exports.roomcreate = async (user) => {
+    var meetingid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var user = await userPost.find({username:user});
+    console.log(user)
+    var meetingroom = new roomPost({
+      adminuser:user[0]._id,
+      roomID: meetingid
+    });
+    meetingroom.save()
+    return meetingid
   }
 // exports.indexitempopulate = async () => {
 //   try {

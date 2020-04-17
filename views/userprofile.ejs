@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel='icon' href='/images/favicon.jpg' type='image/x-icon'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
+        <link href="/stylesheets/main.css" rel="stylesheet">
+    <title>User profile</title>
+</head>
+<body>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
+            <div class="container">
+              <a class="navbar-brand" href="#">
+                  <img src="/images/Logo.png" height="30" alt="mdb logo">
+                </a>
+              <!-- <a class="navbar-brand" href="#">
+                <strong>COllABORATION Vr</strong>
+              </a> -->
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
+                aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- <span class="navbar-toggler-icon"></span> -->
+                <a class="nav-link" href="/apiGet/userprofile" style="color: white;">Profile</a>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <!-- <a class="nav-link" href="/apiGet/">About Us -->
+                          <!-- <span class="sr-only">(current)</span> -->
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <!-- <a class="nav-link" href="about.html">About</a> -->
+                      </li>
+                      <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">Categories</a>
+                        <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink" style="border-color: #d5c08b;">
+                          <a class="dropdown-item" href="/apiGet/wines">Wines</a>
+                          <a class="dropdown-item" href="/apiGet/spirits">Spirits</a>
+                          <a class="dropdown-item" href="/apiGet/beers">Beers</a>
+                        </div>
+                      </li> -->
+                  </ul>
+                  <% if(loggedin){ %>
+                    <!-- Right -->
+                    <ul class="navbar-nav nav-flex-icons">
+                      <!-- <form class="form-inline">
+                        <div class="md-form my-0">
+                          <input class="form-control mr-sm-2" id="anythingSearch" type="text" placeholder="Search" aria-label="Search">
+                        </div>
+                      </form> -->
+                      <!-- <li class="nav-item">
+                          <a class="nav-link waves-effect waves-light" href="/apiGet/favourites">
+                          <i class="far fa-star"></i>
+                          </a>
+                      </li> -->
+                      <li class="nav-item">
+                          <!-- <a class="nav-link waves-effect waves-light" href="/apiGet/cart"> -->
+                            <a class="nav-link" href="/apiGet/userprofile">Profile</a>
+                          <!-- </a> -->
+                      </li>
+
+                    </ul>
+                  <% } else{ %>  
+                    <ul class="navbar-nav nav-flex-icons">
+                      <!-- <form class="form-inline">
+                        <div class="md-form my-0">
+                          <input class="form-control mr-sm-2"  id="anythingSearch"  type="text" placeholder="Search" aria-label="Search">
+                        </div>
+                      </form> -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="/apiGet/login">login</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/apiGet/signup">Sign up</a>
+                      </li>
+                    </ul>
+                <% } %>
+                </div>
+            </div>
+          </nav>
+
+    <div class="container" style="margin-top: 80px;">
+        <div class="container">
+           <a href="/apiGet/joinroom"><button type="button" class="btn btn-primary">Join Room</button></a>
+            <a href="/apiGet/createroom"><button type="button" class="btn btn-primary">Create Room</button></a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicExampleModal">
+                Add Document
+            </button>
+        </div>
+            <!-- Modal -->
+            <div class="modal fade" id="basicExampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Document</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="/apiPost/fileupload" enctype="multipart/form-data">
+                                <input type="file" name="presentationfile" class="btn btn-primary" id="presentationfile">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                        <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+          <!-- <div class="col-md-4">
+            <h2>Active rooms</h2>
+            <!-- Card --
+            <div class="card">
+
+                <!-- Card content --
+                <div class="card-body">
+            
+
+                <!-- Button -->
+                <!-- <a href="#" class="btn btn-primary">Button</a> --
+            
+                </div>
+            
+            </div>
+            <!-- Card --
+          </div> -->
+          <div class="col-md-8">
+    
+            <h2>Your Documents</h2>
+            <% if(hasfiles){ %>
+                <% files.forEach(function(files){ %>
+                    <div class="card">
+
+                        <!-- Card content -->
+                        <div class="card-body">
+
+                                <!-- <div class="col-md-12"> -->
+                                    <p id="<%= files.filepath %>"><%= files.filepath %></p>
+                                    <!-- <a href="/apiGet/loadpower/<%= files.filepath %>">  <button id="loadtovr"  onclick="myFunction()">Load file</button></a> -->
+                        
+                                <!-- </div> -->
+                        
+
+                        <!-- Button -->
+                        <a href="/apiGet/loadpower/<%= files.filepath %>" class="btn btn-primary">Load file</a>
+                    
+                        </div>
+                    
+                    </div>
+                    <!-- Card -->
+                <% }) %>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="container">
+        <div class="card">
+            <h3>Choose a your presentation document</h3>
+            <div class="row">
+                <% if(hasfiles){ %>
+                <% files.forEach(function(files){ %>
+                <div class="col-md-12">
+                    <p id="<%= files.filepath %>">File name: <%= files.filepath %></p>
+                  <a href="/apiGet/loadpower/<%= files.filepath %>">  <button id="loadtovr"  onclick="myFunction()">Load file</button></a>
+    
+                </div>
+                <% }) %>
+                <% } %>
+            </div>
+        </div>
+      </div> -->
+
+    <!-- <p>your username is <%= username %></p>
+    <p>Please choose a room</p>
+    <a href="/apiGet/room/<%= username %>">room1</a>
+    <br> -->
+    <!-- <form method="POST" action="/apiPost/fileupload" enctype="multipart/form-data">
+        <input type="file" name="presentationfile" id="presentationfile">
+        <button type="submit">Submit</button>
+    </form> -->
+    <!-- <br>
+    <div class="card">
+        <h3>Choose a your presentation document</h3>
+        <div class="row">
+            <% if(hasfiles){ %>
+            <% files.forEach(function(files){ %>
+            <div class="col-md-12">
+                <p id="<%= files.filepath %>">File name: <%= files.filepath %></p>
+              <a href="/apiGet/loadpower/<%= files.filepath %>">  <button id="loadtovr"  onclick="myFunction()">Load file</button></a>
+
+            </div>
+            <% }) %>
+            <% } %>
+        </div>
+    </div>
+    <script>
+        function myFunction() {
+            
+        }
+    </script> -->
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/js/mdb.min.js"></script>
+<!-- <script src="/javascripts/jquerymobile.js"></script> -->
+<script src="/javascripts/main.js"></script>
+</html>

@@ -67,9 +67,9 @@ function whereYouwere(req,res,next){
 
 router.post('/register', cleanBody,controller.postRegister);
 
-
+router.post('/joinroom/:id',isLoggedIn,controller.postRoom);
 router.post('/login',cleanBody, whereYouwere,
-  passport.authenticate('local', { successReturnToOrRedirect: '/',
+  passport.authenticate('local', { successReturnToOrRedirect: '/apiGet/userprofile',
                                    failureRedirect: '/apiGet/login',
                                    failureFlash:"Invalid Username or Password",
                                    failureMessage:'Invalid Username or Password',

@@ -15,8 +15,10 @@ const create  = services;
 
 exports.getLogin = async (req, res) => {
     try {
+        console.log("at controller")
         if(req.session.messages){
             const hasmessage = true;
+            
             res.render('login',{hasmessage:hasmessage,messages:req.session.messages[0]});
         }else{
             const hasmessage = false
@@ -37,24 +39,52 @@ exports.getSignup = async (req, res) => {
     }
 }
 
+
 exports.getIndex = async (req, res) => {
     try {
-            hassess = true
-            var result = await create.userprefile(req.user.username);
-            if(result <= 0){
-                hasfiles = false
+        if(req.session.messages){
+        const messages =req.session.messages;
+        messages.length = [];
+        }
+
+        if(req){
+            if(req.user){
+                isloggedin = true;
+                const hasmessage = true;
+                res.render('index',{hasmessage:hasmessage,messages: req.flash('paymentstarted'),loggedin:isloggedin,userimage:req.user.profileimg});
             }else{
-                hasfiles = true
+                isloggedin = false;
+                res.render('index',{loggedin:isloggedin});
             }
-           
-            res.render('index',{hassess:hassess, username:req.user.username, files:result,hasfiles:hasfiles});
-        
+        }else{
+            isloggedin = false;
+            res.render('index',{loggedin:isloggedin});
+        }
     } catch (error) {
         throw new Error(error.message);
     }
 }
+exports.getjoinroom = async (req,res) => {
+    try {
+        const hasmessage = true;
+        isloggedin = true;
+        res.render('joinroom',{ loggedin:isloggedin,hasmessage:hasmessage,messages: req.flash('notify') });
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-exports.getroom = async (req,res) => {
+exports.getcreateroom = async (req,res) => {
+    try {
+        const hasmessage = true;
+        isloggedin = true;
+        var result = await create.roomcreate(req.user.username);
+        res.render('createroom',{ loggedin:isloggedin,hasmessage:hasmessage,messages: req.flash('notify'),meetingid:result});
+    } catch (error) {
+        console.log(error)
+    }
+}
+exports.getjoinVRroom = async(req,res) => {
     try {
         var path = 'public/assets/ownslidespres'
         
@@ -66,14 +96,73 @@ exports.getroom = async (req,res) => {
                 hasfiles = true
             }
             var myArr = Array.from(items);
-            res.render('vrroom',{ username:req.params.string,slides:myArr,hasfiles:hasfiles,itemnumber:items.length});
+            isloggedin = true;
+            res.render('vrroom',{ loggedin:isloggedin,username:req.user.username,slides:myArr,hasfiles:hasfiles,itemnumber:items.length});
 
         });
-        // res.render('vrroom',{ username:req.params.string});
+    } catch (error) {
+        
+    }
+}
+exports.postRoom = async (req,res) => {
+    try {
+        console.log(req.body.roomid)
+        var path = 'public/assets/ownslidespres'
+        
+        fs.readdir(path, function(err, items) {
+            // console.log(items);
+            if(items <= 0){
+                hasfiles = false
+            }else{
+                hasfiles = true
+            }
+            var myArr = Array.from(items);
+            isloggedin = true;
+            res.render('vrroom',{ loggedin:isloggedin,username:req.user.username,slides:myArr,hasfiles:hasfiles,itemnumber:items.length});
+
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+exports.getuserprofile = async (req, res) => {
+    try {
+            hassess = true
+            var result = await create.userprefile(req.user.username);
+            if(result <= 0){
+                hasfiles = false
+            }else{
+                hasfiles = true
+            }
+            isloggedin = true;
+            res.render('userprofile',{loggedin:isloggedin,hassess:hassess, username:req.user.username, files:result,hasfiles:hasfiles});
+        
     } catch (error) {
         throw new Error(error.message);
     }
 }
+
+// exports.getroom = async (req,res) => {
+//     try {
+//         var path = 'public/assets/ownslidespres'
+        
+//         fs.readdir(path, function(err, items) {
+//             // console.log(items);
+//             if(items <= 0){
+//                 hasfiles = false
+//             }else{
+//                 hasfiles = true
+//             }
+//             var myArr = Array.from(items);
+//             res.render('vrroom',{ username:req.params.string,slides:myArr,hasfiles:hasfiles,itemnumber:items.length});
+
+//         });
+//         // res.render('vrroom',{ username:req.params.string});
+//     } catch (error) {
+//         throw new Error(error.message);
+//     }
+// }
 
 exports.postRegister = async (req, res, next) => {
     try {

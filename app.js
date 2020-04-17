@@ -138,12 +138,20 @@ io.on('connection', function (socket) {
   //end of the file load button click message
 
     //message from client that slideshow load button has been clicked
-    socket.on('nowloadslideshow',function(){
+    socket.on('nowloadslides',function(){
       //broadcast to all client what to do after the button is clicked
-      socket.broadcast.emit('loadslideshow');
-      socket.emit('loadslideshow');
+      socket.broadcast.emit('loadslidesnow');
+      socket.emit('loadslidesnow');
     });
     //end of the slideshow load button click message
+
+        //message from client that sky load button has been clicked
+        socket.on("nowloadsky",function(){
+          //broadcast to all client what to do after the button is clicked
+          socket.broadcast.emit('loadskynow');
+          socket.emit('loadskynow');
+        });
+        //end of the sky load button click message
 
 })
 
