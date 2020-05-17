@@ -140,16 +140,16 @@ exports.registeruser = async (body) => { //handles registration of users
 //   }
 // }
 
-// exports.deletesession = async (req) => { //handles log out and session kill
-//   try {
-//     if(req) {
-//       req.session.destroy(function(){
-//         req.logOut();
-//       });
-//       } else {
-//         console.log('error');
-//       }
-//   } catch(e) {
-//     throw new Error(e.message)
-//   }
-// }
+exports.deletesession = async (req) => { //handles log out and session kill
+  try {
+    if(req.session) {
+      req.session.destroy(function(){
+        req.logOut();
+      });
+      } else {
+        console.log('error');
+      }
+  } catch(e) {
+    throw new Error(e.message)
+  }
+}

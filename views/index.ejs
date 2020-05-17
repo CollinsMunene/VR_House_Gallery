@@ -47,16 +47,16 @@
         }
       
         .top-nav-collapse {
-          background-color: #424f95 !important;
+          background-color: #012d48 !important;
         }
       
         .navbar:not(.top-nav-collapse) {
-          background: transparent !important;
+          background: #012d48 !important;
         }
       
         @media (max-width: 991px) {
          .navbar:not(.top-nav-collapse) {
-          background: #424f95 !important;
+          background: #012d48 !important;
          }
         }
       
@@ -85,18 +85,18 @@
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar">
       <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/apiGet/">
             <img src="/images/Logo.png" height="30" alt="mdb logo">
           </a>
         <!-- <a class="navbar-brand" href="#">
           <strong>COllABORATION Vr</strong>
         </a> -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
           aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
-          <!-- <span class="navbar-toggler-icon"></span> -->
-          <a class="nav-link" href="/apiGet/userprofile" style="color: white;">Profile</a>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+          <span class="navbar-toggler-icon"></span>
+          <!-- <a class="nav-link" href="/apiGet/userprofile" style="color: white;">Profile</a> --
+        </button> -->
+        <div class="" id="navbarSupportedContent-7">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
                   <!-- <a class="nav-link" href="/apiGet/">About Us -->
@@ -124,29 +124,30 @@
                     <input class="form-control mr-sm-2" id="anythingSearch" type="text" placeholder="Search" aria-label="Search">
                   </div>
                 </form> -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link waves-effect waves-light" href="/apiGet/favourites">
-                    <i class="far fa-star"></i>
-                    </a>
-                </li> -->
                 <li class="nav-item">
+                  <a class="nav-link" href="/apiGet/userprofile">Profile</a>
+
+                </li>
+                <li class="nav-item" class="dropdown-item" >
                     <!-- <a class="nav-link waves-effect waves-light" href="/apiGet/cart"> -->
-                      <a class="nav-link" href="/apiGet/userprofile">Profile</a>
+                      <form action="/apiDelete/logout?_method=DELETE" method="post">
+                        <button type="submit" class="btn" style="color: white;padding:5px">Log Out</button>
+                      </form>
                     <!-- </a> -->
                 </li>
-                <!-- <li class="nav-item dropdown avatar">
-                  <a class=" nav-link dropdown-toggle p-0" id="navbarDropdownMenuLink" 
+                 <li class="nav-item dropdown avatar">
+                  <!--<a class=" nav-link dropdown-toggle p-0" id="navbarDropdownMenuLink" 
                   data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                       <img src="/images/profile_images/<%= userimage %>" class="rounded-circle z-depth-0"
                         alt="avatar image" height="35">
-                  </a>
-                  <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink" style="border-color: #d5c08b;">
+                  </a>-->
+                  <!-- <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink" style="border-color: #d5c08b;">
                     <a class="dropdown-item" href="/apiGet/profile">Profile</a>
                     <form action="/apiDelete/logout?_method=DELETE" method="post" class="dropdown-item">
                       <button type="submit" class="btn">Log Out</button>
                     </form>
-                  </div>
-                </li> -->
+                  </div> -->
+                </li> 
               </ul>
             <% } else{ %>  
               <ul class="navbar-nav nav-flex-icons">

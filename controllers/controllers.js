@@ -51,6 +51,7 @@ exports.getIndex = async (req, res) => {
             if(req.user){
                 isloggedin = true;
                 const hasmessage = true;
+                console.log("user here")
                 res.render('index',{hasmessage:hasmessage,messages: req.flash('paymentstarted'),loggedin:isloggedin,userimage:req.user.profileimg});
             }else{
                 isloggedin = false;
@@ -198,13 +199,13 @@ exports.getloadpower = async (req,res,next) => {
  }
 
 
-//   exports.deleteLogout = async (req, res, next) => {
-//     try {
-//       await create.deletesession(req);
-//       res.redirect('/apiGet/login');
-//       // next()
-//     } catch(e) {
-//         throw new Error(e.message);
-//       //res.sendStatus(500) && next(error)
-//     }
-//   }
+  exports.deleteLogout = async (req, res, next) => {
+    try {
+      await create.deletesession(req);
+      res.redirect('/apiGet/login');
+      // next()
+    } catch(e) {
+        throw new Error(e.message);
+      //res.sendStatus(500) && next(error)
+    }
+  }

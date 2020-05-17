@@ -29,7 +29,7 @@ router.use(methodOverride('_method'));
 
 
 ////////////////////////////////////////// LOG OUT AND SESSION DELETE FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-// router.delete('/logout',controller.deleteLogout);
+router.delete('/logout',controller.deleteLogout);
 
 
 module.exports = router;

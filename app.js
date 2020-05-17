@@ -160,6 +160,7 @@ const rooms = {};
 
 io.on("connection", socket => {
   console.log("user connected", socket.id);
+  socket.emit("userroomid",socket.id)
 
   let curRoom = null;
 
