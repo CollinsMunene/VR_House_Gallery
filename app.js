@@ -25,9 +25,11 @@ const cors = require('cors'); //load library for cross platform integration
 const passport = require('passport'); //load passport authentication library
 const session = require('express-session'); //load sessions library
 const initializePassport = require('./passport/passport-config'); //load the passport config file
-const redis   = require("redis"); //load redis to hold act as session stores
-const redisStore = require('connect-redis')(session); //load connect-redis library to act as a session store
-const client  = redis.createClient(); //create a client for redis
+
+//install redis
+//const redis   = require("redis"); //load redis to hold act as session stores
+//const redisStore = require('connect-redis')(session); //load connect-redis library to act as a session store
+//const client  = redis.createClient(); //create a client for redis
 const helmet = require('helmet')  //load library that sets constious security headers
 const mongoSanitize = require('express-mongo-sanitize'); //load library to sanitize user inputs
 const expressValidator = require('express-validator');
@@ -73,7 +75,7 @@ const expiryDate = new Date(Date.now() + 60 * 60 * 1000)
 app.use(session({
   secret: 'ThisIsHowYouUseRedisSessionStorage', //used to hash the sessions
   name: '_NIP', //used to name the cookie
-  store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl :  260}), //connections settings for redis
+  //store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl :  260}), //connections settings for redis
   saveUninitialized: true,
   resave: true,
   // cookie: {
